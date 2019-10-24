@@ -1,107 +1,88 @@
 package com.e.mvvmlivedata.views.fragments;
-
-
-import android.arch.lifecycle.Observer;
-import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.design.widget.FloatingActionButton;
-import android.support.v4.app.Fragment;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ProgressBar;
+import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.databinding.DataBindingUtil;
+import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.e.mvvmlivedata.R;
 import com.e.mvvmlivedata.base.BaseFragment;
-import com.e.mvvmlivedata.base.BaseView;
+import com.e.mvvmlivedata.databinding.FragmentMainBinding;
 import com.e.mvvmlivedata.models.NicePlace;
 import com.e.mvvmlivedata.viewmodels.MainViewModel;
-import com.e.mvvmlivedata.views.adapters.RecyclerAdapter;
+import com.e.mvvmlivedata.views.adapters.PlacesAdapter;
+import com.e.mvvmlivedata.views.interfaces.NicePlaceContract;
+import com.google.android.material.snackbar.Snackbar;
 
-import java.util.List;
+public class MainFragment extends BaseFragment implements NicePlaceContract {
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-
-public class MainFragment extends BaseFragment  {
-
-    @BindView(R.id.recycler_view)
-    RecyclerView mRecyclerView;
-    @BindView(R.id.fab)
-    FloatingActionButton mFab;
-    @BindView(R.id.progress_bar)
-    ProgressBar mProgressBar;
-    private RecyclerAdapter mAdapter;
+    private PlacesAdapter mAdapter;
     private MainViewModel mainViewModel;
-
+    private FragmentMainBinding fragmentMainBinding;
     public static MainFragment getInstance() {
         return new MainFragment();
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_main, container, false);
-        ButterKnife.bind(this, view);
-        return view;
+        fragmentMainBinding = DataBindingUtil.inflate(inflater,R.layout.fragment_main, container, false);
+        return fragmentMainBinding.getRoot();
     }
+
     @Override
     protected void initViewModel() {
-        mainViewModel.getNicePlaces().observe(this, new Observer<List<NicePlace>>() {
-            @Override
-            public void onChanged(@Nullable List<NicePlace> nicePlaces) {
-                mAdapter.notifyDataSetChanged();
-            }
-        });
+        mainViewModel.getNicePlaces().observe(this, nicePlaces -> mAdapter.notifyDataSetChanged());
 
-        mainViewModel.getIsUpdating().observe(this, new Observer<Boolean>() {
-            @Override
-            public void onChanged(@Nullable Boolean aBoolean) {
-                if (aBoolean) {
-                    showProgressBar();
-                } else {
-                    hideProgressBar();
-                    mRecyclerView.smoothScrollToPosition(mainViewModel.getNicePlaces().getValue().size() - 1);
-                }
+        mainViewModel.getIsUpdating().observe(this, aBoolean -> {
+            if (aBoolean) {
+                showProgressBar();
+            } else {
+                hideProgressBar();
+                fragmentMainBinding.recyclerView.smoothScrollToPosition(mainViewModel.getNicePlaces().getValue().size() - 1);
             }
         });
 
 
-        mFab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                mainViewModel.addNewValue(
-                        new NicePlace(
-                                "https://i.imgur.com/ZcLLrkY.jpg",
-                                "Washington"
-                        )
-                );
-            }
+        mainViewModel.getAddingNicePlace().observe(this, nicePlace -> {
+            if(nicePlace!=null)
+            mainViewModel.addNewValue(nicePlace);
         });
     }
 
     @Override
     protected void initComponents() {
         mainViewModel = ViewModelProviders.of(this).get(MainViewModel.class);
+        fragmentMainBinding.setViewModel(mainViewModel);
         mainViewModel.init();
         initRecyclerView();
     }
 
     private void initRecyclerView() {
-        mAdapter = new RecyclerAdapter(getContext(), mainViewModel.getNicePlaces().getValue());
+        mAdapter = new PlacesAdapter(this, mainViewModel.getNicePlaces().getValue());
         RecyclerView.LayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
-        mRecyclerView.setLayoutManager(linearLayoutManager);
-        mRecyclerView.setAdapter(mAdapter);
+        fragmentMainBinding.recyclerView.setLayoutManager(linearLayoutManager);
+        fragmentMainBinding.setAdapter(mAdapter);
     }
 
     private void showProgressBar() {
-        mProgressBar.setVisibility(View.VISIBLE);
+        fragmentMainBinding.progressBar.setVisibility(View.VISIBLE);
     }
 
     private void hideProgressBar() {
-        mProgressBar.setVisibility(View.GONE);
+        fragmentMainBinding.progressBar.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void onPlaceClicked(NicePlace nicePlace) {
+
+        Snackbar.make(fragmentMainBinding.mainLayout,nicePlace.getTitle(),Snackbar.LENGTH_LONG).show();
+     //   Toast.makeText(getContext(), ""+nicePlace.getTitle(), Toast.LENGTH_SHORT).show();
     }
 }

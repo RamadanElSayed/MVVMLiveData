@@ -1,7 +1,7 @@
 package com.e.mvvmlivedata.base;
 
 import android.app.ProgressDialog;
-import android.support.v4.app.Fragment;
+import androidx.fragment.app.Fragment;
 import android.widget.Toast;
 public abstract class BaseFragment extends Fragment implements BaseView {
 

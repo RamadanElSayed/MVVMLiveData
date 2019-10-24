@@ -1,25 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:bind="http://schemas.android.com/tools">
+    <data>
+        <variable
+            name="model"
+            type="com.e.mvvmlivedata.models.NicePlace" />
+
+        <variable
+            name="niceClicked"
+            type="com.e.mvvmlivedata.views.interfaces.NicePlaceContract" />
+    </data>
+<RelativeLayout
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:padding="15dp"
+    android:onClick="@{()->niceClicked.onPlaceClicked(model)}"
     android:id="@+id/parent_layout">
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:layout_width="80dp"
         android:layout_height="80dp"
         android:id="@+id/image"
-        android:src="@mipmap/ic_launcher"/>
+        bind:avatar="@{model.imageUrl}"
+       />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Canada"
+        android:text="@{model.title}"
         android:id="@+id/image_name"
-        android:layout_toRightOf="@+id/image"
         android:textColor="#000"
         android:layout_centerVertical="true"
-        android:layout_marginLeft="30dp"
-        android:textSize="17sp"/>
+        android:textSize="17sp"
+        android:layout_toEndOf="@+id/image"
+        android:layout_marginStart="30dp"
+        android:layout_toRightOf="@+id/image"
+        android:layout_marginLeft="30dp" />
 
 </RelativeLayout>
+</layout>

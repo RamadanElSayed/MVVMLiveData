@@ -1,6 +1,6 @@
 package com.e.mvvmlivedata.repositories;
 
-import android.arch.lifecycle.MutableLiveData;
+import androidx.lifecycle.MutableLiveData;
 
 import com.e.mvvmlivedata.models.NicePlace;
 
@@ -68,11 +68,6 @@ public class NicePlaceRepository {
         );
     }
 }
-
-
-
-
-
 
 
 

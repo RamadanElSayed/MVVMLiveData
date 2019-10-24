@@ -1,5 +1,13 @@
 package com.e.mvvmlivedata.models;
 
+import android.widget.ImageView;
+
+import androidx.databinding.BindingAdapter;
+
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
+import com.e.mvvmlivedata.R;
+
 public class NicePlace {
 
     private String title;
@@ -29,4 +37,16 @@ public class NicePlace {
         this.imageUrl = imageUrl;
     }
 
+    // important code for loading image here
+
+    @BindingAdapter({ "avatar" })
+    public static void loadImage(ImageView imageView, String imageUrl) {
+
+        Glide.with(imageView.getContext())
+                .setDefaultRequestOptions(new RequestOptions()
+                        .circleCrop())
+                .load(imageUrl)
+                .placeholder(R.drawable.ic_launcher_foreground)
+                .into(imageView);
+    }
 }
