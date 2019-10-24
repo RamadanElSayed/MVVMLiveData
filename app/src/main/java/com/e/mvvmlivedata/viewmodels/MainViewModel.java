@@ -45,6 +45,7 @@ public class MainViewModel extends AndroidViewModel {
             protected void onPostExecute(Void aVoid) {
                 super.onPostExecute(aVoid);
                 List<NicePlace> currentPlaces = mNicePlaces.getValue();
+                assert currentPlaces != null;
                 currentPlaces.add(nicePlace);
 
                 mNicePlaces.postValue(currentPlaces);
