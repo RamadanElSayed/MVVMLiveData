@@ -24,7 +24,6 @@ public class NicePlaceRepository {
         return instance;
     }
 
-
     // Pretend to get data from a webservice or online source
     public MutableLiveData<List<NicePlace>> getNicePlaces(){
         setNicePlaces();
