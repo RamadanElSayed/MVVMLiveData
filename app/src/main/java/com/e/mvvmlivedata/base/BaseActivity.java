@@ -8,6 +8,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 
+import com.e.mvvmlivedata.R;
+
 @SuppressLint("Registered")
 public class BaseActivity extends AppCompatActivity {
 
@@ -21,11 +23,29 @@ public class BaseActivity extends AppCompatActivity {
         transaction.replace(getContentViewId(), fragment);
         transaction.commit();
     }
+
+
+//    @Override
+//    protected void onStart() {
+//        super.onStart();
+//        this.overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_left);
+//    }
+//
+//
+//    @Override
+//    public void finish() {
+//        super.finish();
+//        this.overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_right);
+//    }
+
     public void replaceCurrentFragment( Fragment targetFragment, boolean addToBackStack) {
 
         FragmentManager manager = getSupportFragmentManager();
 
         FragmentTransaction ft = manager.beginTransaction();
+       ft.setCustomAnimations(R.anim.slide_in_up, R.anim.slide_out_up);
+      //  ft.setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_left);
+       // ft.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_right);
 
         ft.replace(getContentViewId(), targetFragment, targetFragment.getClass().getName());
         if (addToBackStack) {
@@ -41,6 +61,12 @@ public class BaseActivity extends AppCompatActivity {
     public void onBackPressed() {
         if (getSupportFragmentManager().getBackStackEntryCount() > 1) {
             getSupportFragmentManager().popBackStack();
+            if(getSupportActionBar() != null) {
+                if(getSupportActionBar().isShowing())
+                getSupportActionBar().hide();
+                else
+                    getSupportActionBar().show();
+            }
         }
         else {
             finish();

@@ -8,5 +8,8 @@
   <li>Databinding </li>
   <li>glide for loading images </li>
   <li>Adapter with binding</li>
+  <li>Make custom Image view for Scaling and zooming </li>
+  <li>Using animation files </li>
+  <li>Using SwipeRefresh layout</li>
 </ol>
 <h2>IMPORTANT SETUP INFORMATION</h2>

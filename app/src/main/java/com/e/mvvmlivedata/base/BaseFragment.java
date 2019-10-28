@@ -11,8 +11,8 @@ public abstract class BaseFragment extends Fragment implements BaseView {
     @Override
     public void onStart() {
         super.onStart();
-        initComponents();
-        initViewModel();
+        //initComponents();
+        //initViewModel();
     }
 
     @Override

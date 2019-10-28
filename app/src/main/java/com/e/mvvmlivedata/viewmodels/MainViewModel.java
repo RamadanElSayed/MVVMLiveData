@@ -20,27 +20,25 @@ public class MainViewModel extends AndroidViewModel {
     // MutableLiveData where we can setValue and Post and LiveData  we can not set but we can get ..
     private MutableLiveData<List<NicePlace>> mNicePlaces;
     // for checking the get more ..and progress par
-    private MutableLiveData<NicePlace>nicePlaceMutableLiveData;
     private MutableLiveData<Boolean> mIsUpdating = new MutableLiveData<>();
 
     public MainViewModel(@NonNull Application application) {
         super(application);
     }
 
-    public void init(){
-        if(mNicePlaces != null){
+    public void init() {
+        if (mNicePlaces != null) {
             return;
         }
         NicePlaceRepository mRepo = NicePlaceRepository.getInstance();
         mNicePlaces = mRepo.getNicePlaces();
-        nicePlaceMutableLiveData=new MutableLiveData<>();
     }
 
     @SuppressLint("StaticFieldLeak")
-    public void addNewValue(final NicePlace nicePlace){
+    public void addNewValue(final NicePlace nicePlace) {
         mIsUpdating.setValue(true);
 
-        new AsyncTask<Void, Void, Void>(){
+        new AsyncTask<Void, Void, Void>() {
             @Override
             protected void onPostExecute(Void aVoid) {
                 super.onPostExecute(aVoid);
@@ -66,23 +64,20 @@ public class MainViewModel extends AndroidViewModel {
     }
 
 
-
-    public LiveData<List<NicePlace>> getNicePlaces(){
+    public LiveData<List<NicePlace>> getNicePlaces() {
         return mNicePlaces;
     }
 
-    public void setNicePlaceLive()
-    {
-        NicePlace nicePlace= new NicePlace(
+    public void setNicePlaceLive() {
+        NicePlace nicePlace = new NicePlace(
                 "https://i.imgur.com/ZcLLrkY.jpg",
                 "Washington");
-        nicePlaceMutableLiveData.setValue(nicePlace);
+
+        addNewValue(nicePlace);
+
     }
-    public LiveData<NicePlace>getAddingNicePlace()
-    {
-        return nicePlaceMutableLiveData;
-    }
-    public LiveData<Boolean> getIsUpdating(){
+
+    public LiveData<Boolean> getIsUpdating() {
         return mIsUpdating;
     }
 }
