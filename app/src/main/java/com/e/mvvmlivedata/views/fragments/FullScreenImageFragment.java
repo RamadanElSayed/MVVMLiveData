@@ -21,6 +21,7 @@ import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.Target;
 import com.e.mvvmlivedata.R;
+import com.e.mvvmlivedata.databinding.FragmentFullScreenProductBinding;
 import com.e.mvvmlivedata.utils.ScalingImageView;
 import com.e.mvvmlivedata.views.interfaces.IIssueDetail;
 
@@ -30,13 +31,12 @@ public class FullScreenImageFragment extends Fragment {
 
     private static final String TAG = "FullScreenImageFragment";
 
-    //widgets
-    private ScalingImageView mImageView;
-
     //vars
-    public Object mImageResource;
+    private Object mImageResource;
     private IIssueDetail mIIssueDetail;
     private boolean flag = true;
+
+    FragmentFullScreenProductBinding binding;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -49,14 +49,9 @@ public class FullScreenImageFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_full_screen_product, container, false);
-        mImageView = view.findViewById(R.id.fullscreen_image);
-
+        binding = FragmentFullScreenProductBinding.inflate(inflater);
         setImage();
-
-        return view;
-
-
+        return binding.getRoot();
     }
 
 
@@ -93,22 +88,22 @@ public class FullScreenImageFragment extends Fragment {
                 .setDefaultRequestOptions(options)
                 .load(mImageResource)
                 .listener(listener)
-                .into(mImageView);
+                .into(binding.fullscreenImage);
 
 
-        mImageView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-//                if (flag) {
-//                    mIIssueDetail.showActionBar();
-//                    flag = false;
-//                } else {
-//                    mIIssueDetail.hideActionBar();
-//                    flag = true;
-//                }
-
-            }
-        });
+//        mImageView.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+////                if (flag) {
+////                    mIIssueDetail.showActionBar();
+////                    flag = false;
+////                } else {
+////                    mIIssueDetail.hideActionBar();
+////                    flag = true;
+////                }
+//
+//            }
+//        });
 
     }
 

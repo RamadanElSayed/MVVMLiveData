@@ -3,6 +3,9 @@ package com.e.mvvmlivedata.viewmodels;
 import android.annotation.SuppressLint;
 import android.app.Application;
 import android.os.AsyncTask;
+import android.util.Log;
+import android.webkit.ValueCallback;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
@@ -31,7 +34,8 @@ public class MainViewModel extends AndroidViewModel {
             return;
         }
         NicePlaceRepository mRepo = NicePlaceRepository.getInstance();
-        mNicePlaces = mRepo.getNicePlaces();
+       mNicePlaces=mRepo.getNicePlaces();
+
     }
 
     @SuppressLint("StaticFieldLeak")

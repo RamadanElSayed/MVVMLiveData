@@ -38,7 +38,7 @@ public class MainFragment extends BaseFragment implements NicePlaceContract , Sw
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        fragmentMainBinding = DataBindingUtil.inflate(inflater,R.layout.fragment_main, container, false);
+        fragmentMainBinding = FragmentMainBinding.inflate(inflater);
         fragmentMainBinding.swipeRefreshLayout.setOnRefreshListener(this);
 
         return fragmentMainBinding.getRoot();

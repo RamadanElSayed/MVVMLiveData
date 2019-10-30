@@ -6,6 +6,7 @@
 <ol>
   <li>MVVM Livedata</li>
   <li>Databinding </li>
+  <li>RX Java,RX Android</li>
   <li>glide for loading images </li>
   <li>Adapter with binding</li>
   <li>Make custom Image view for Scaling and zooming </li>
