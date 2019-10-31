@@ -1,20 +1,11 @@
 package com.e.mvvmlivedata.viewmodels;
-
-import android.annotation.SuppressLint;
 import android.app.Application;
-import android.os.AsyncTask;
-import android.util.Log;
-import android.webkit.ValueCallback;
-import android.widget.Toast;
-
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
-
 import com.e.mvvmlivedata.models.NicePlace;
 import com.e.mvvmlivedata.repositories.NicePlaceRepository;
-
 import java.util.List;
 
 public class MainViewModel extends AndroidViewModel {
@@ -23,7 +14,8 @@ public class MainViewModel extends AndroidViewModel {
     // MutableLiveData where we can setValue and Post and LiveData  we can not set but we can get ..
     private MutableLiveData<List<NicePlace>> mNicePlaces;
     // for checking the get more ..and progress par
-    private MutableLiveData<Boolean> mIsUpdating = new MutableLiveData<>();
+    private MutableLiveData<Boolean> mIsUpdating;
+    private NicePlaceRepository mRepo;
 
     public MainViewModel(@NonNull Application application) {
         super(application);
@@ -33,40 +25,15 @@ public class MainViewModel extends AndroidViewModel {
         if (mNicePlaces != null) {
             return;
         }
-        NicePlaceRepository mRepo = NicePlaceRepository.getInstance();
-       mNicePlaces=mRepo.getNicePlaces();
-
+        mRepo = NicePlaceRepository.getInstance();
+        mNicePlaces = mRepo.getNicePlaces();
+        mIsUpdating=mRepo.getmIsUpdating();
     }
 
-    @SuppressLint("StaticFieldLeak")
-    public void addNewValue(final NicePlace nicePlace) {
-        mIsUpdating.setValue(true);
+    private void addNewValue(final NicePlace nicePlace) {
 
-        new AsyncTask<Void, Void, Void>() {
-            @Override
-            protected void onPostExecute(Void aVoid) {
-                super.onPostExecute(aVoid);
-                List<NicePlace> currentPlaces = mNicePlaces.getValue();
-                assert currentPlaces != null;
-                currentPlaces.add(nicePlace);
-
-                mNicePlaces.postValue(currentPlaces);
-                mIsUpdating.postValue(false);
-            }
-
-            @Override
-            protected Void doInBackground(Void... voids) {
-
-                try {
-                    Thread.sleep(2000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                return null;
-            }
-        }.execute();
+        mRepo.observeOnNewPlace(nicePlace);
     }
-
 
     public LiveData<List<NicePlace>> getNicePlaces() {
         return mNicePlaces;
@@ -78,10 +45,15 @@ public class MainViewModel extends AndroidViewModel {
                 "Washington");
 
         addNewValue(nicePlace);
-
     }
 
     public LiveData<Boolean> getIsUpdating() {
         return mIsUpdating;
+    }
+
+    @Override
+    protected void onCleared() {
+        super.onCleared();
+        mRepo.onDestroy();
     }
 }
