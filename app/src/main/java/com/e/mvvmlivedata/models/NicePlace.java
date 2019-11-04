@@ -1,5 +1,6 @@
 package com.e.mvvmlivedata.models;
 
+import android.provider.ContactsContract;
 import android.widget.ImageView;
 
 import androidx.databinding.BindingAdapter;
@@ -48,5 +49,25 @@ public class NicePlace {
                 .load(imageUrl)
                 .placeholder(R.drawable.ic_launcher_foreground)
                 .into(imageView);
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == this) {
+            return true;
+        }
+
+        if (!(obj instanceof NicePlace)) {
+            return false;
+        }
+
+        return title.equalsIgnoreCase(((NicePlace) obj).getTitle());
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 3;
+        hash = 53 * hash + (this.title != null ? this.title.hashCode() : 0);
+        return hash;
     }
 }
